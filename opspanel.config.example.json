@@ -1,0 +1,48 @@
+{
+	"title": "OpsPanel",
+	"servers": [
+		{
+			"id": "dev-01",
+			"name": "dev-01",
+			"host": "10.10.10.20",
+			"port": 22,
+			"username": "deployer",
+			"privateKeyEnv": "OPSPANEL_DEV01_PRIVATE_KEY"
+		}
+	],
+	"services": [
+		{
+			"id": "api-server",
+			"name": "API Server",
+			"serverId": "dev-01",
+			"description": "REST API for local development",
+			"workingDirectory": "/var/www/project-api",
+			"startCommand": "npm run dev",
+			"stopCommand": "pkill -f \"npm run dev\"",
+			"statusCommand": "pgrep -f \"npm run dev\" >/dev/null && echo running || echo stopped",
+			"logCommand": "tail -n 100 -f logs/app.log"
+		},
+		{
+			"id": "worker",
+			"name": "Worker",
+			"serverId": "dev-01",
+			"description": "Background worker processing queue jobs",
+			"workingDirectory": "/var/www/project-worker",
+			"startCommand": "npm run worker",
+			"stopCommand": "pkill -f \"npm run worker\"",
+			"statusCommand": "pgrep -f \"npm run worker\" >/dev/null && echo running || echo stopped",
+			"logCommand": "tail -n 100 -f logs/worker.log"
+		},
+		{
+			"id": "scheduler",
+			"name": "Scheduler",
+			"serverId": "dev-01",
+			"description": "Recurring task scheduler",
+			"workingDirectory": "/var/www/project-scheduler",
+			"startCommand": "npm run scheduler",
+			"stopCommand": "pkill -f \"npm run scheduler\"",
+			"statusCommand": "pgrep -f \"npm run scheduler\" >/dev/null && echo running || echo stopped",
+			"logCommand": "tail -n 100 -f logs/scheduler.log"
+		}
+	]
+}
